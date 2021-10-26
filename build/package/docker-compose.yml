@@ -1,0 +1,34 @@
+version: '3'
+services:
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        ports:
+            - 5672:5672
+            - 15672:15672
+
+    mongodb:
+        image: mongo:3.6
+        ports:
+            - '27017:27017'
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+        volumes:
+            - mongodb-data:/data/db
+
+    cashback-sales-consumer:
+        build:
+            context: ./../../
+            dockerfile: build/package/Dockerfile
+        environment:
+            - DATABASE_HOST=db
+            - RABBITMQ_HOST=rabbitmq
+        ports:
+            - 5000:5000
+        depends_on:
+            - mongodb
+            - rabbitmq
+
+volumes:
+    mongodb-data:
+        driver: local

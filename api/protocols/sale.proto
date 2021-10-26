@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "/sale/salepb";
+
+
+message SumSaleValuesRequest {
+    string cpf = 1;
+}
+
+message SumSaleValuesResponse {
+    string cpf = 1;
+    float totalValue = 2;
+    float totalCashback = 3;
+}
+
+service SaleService {
+    rpc SumSaleValues(SumSaleValuesRequest) returns (SumSaleValuesResponse) {};
+}
+
